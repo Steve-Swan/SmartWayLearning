@@ -41,7 +41,7 @@ export default function AuthModal({ open, onClose }) {
     setClasses((prev) => prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setErr("");
     if (!role || !urgency || classes.length === 0 || !name || !phone || !email || !schoolLevel || !format || !groupType) {
       setErr("Please fill in all required fields.");
@@ -52,15 +52,45 @@ export default function AuthModal({ open, onClose }) {
       return;
     }
     setLoading(true);
-    const entry = {
-      id: `inq_${Date.now()}`, role, urgency, classes, name, phone, email,
-      schoolLevel, format, groupType, createdAt: new Date().toISOString(),
+
+    const formData = {
+      _subject: `New Inquiry from ${name}`,
+      "I am": role,
+      "How soon": urgency,
+      "Classes": classes.join(", "),
+      "Full Name": name,
+      "Phone": phone,
+      "Email": email,
+      "School Level": schoolLevel,
+      "Format": format,
+      "Class Type": groupType,
+      "Submitted": new Date().toLocaleString(),
     };
-    const inquiries = DB.get("sw-inquiries") || [];
-    inquiries.push(entry);
-    DB.set("sw-inquiries", inquiries);
-    setLoading(false);
-    setSubmitted(true);
+
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/smartwaylearningcenter@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        const entry = {
+          id: `inq_${Date.now()}`, role, urgency, classes, name, phone, email,
+          schoolLevel, format, groupType, createdAt: new Date().toISOString(),
+        };
+        const inquiries = DB.get("sw-inquiries") || [];
+        inquiries.push(entry);
+        DB.set("sw-inquiries", inquiries);
+        setSubmitted(true);
+      } else {
+        setErr("Failed to send. Please try again.");
+      }
+    } catch (e) {
+      setErr("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const labelStyle = { display: "block", fontSize: 13, fontWeight: 700, color: C.green, marginBottom: 8 };
