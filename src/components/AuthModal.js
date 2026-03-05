@@ -68,13 +68,15 @@ export default function AuthModal({ open, onClose }) {
     };
 
     try {
-      const res = await fetch("https://formsubmit.co/ajax/smartwaylearningcenter@gmail.com", {
+      const res = await fetch("/api/inquiry", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      if (res.ok) {
+      const data = await res.json();
+
+      if (res.ok && data.success) {
         const entry = {
           id: `inq_${Date.now()}`, role, urgency, classes, name, phone, email,
           schoolLevel, format, groupType, createdAt: new Date().toISOString(),
@@ -84,7 +86,7 @@ export default function AuthModal({ open, onClose }) {
         DB.set("sw-inquiries", inquiries);
         setSubmitted(true);
       } else {
-        setErr("Failed to send. Please try again.");
+        setErr(data.message || "Failed to send. Please try again.");
       }
     } catch (e) {
       setErr("Network error. Please check your connection and try again.");
