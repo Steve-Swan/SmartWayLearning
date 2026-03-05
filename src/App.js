@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react";
 import './styles/global.css';
 
 // Components
@@ -54,6 +55,7 @@ export default function App() {
           <Route path="/shsat" element={<SHSATPage onStartToday={() => setAuthOpen(true)} />} />
           <Route path="/sat" element={<SATPage onStartToday={() => setAuthOpen(true)} />} />
         </Routes>
+        <Analytics />
       </div>
     </BrowserRouter>
   );
