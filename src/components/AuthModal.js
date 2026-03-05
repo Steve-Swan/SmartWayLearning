@@ -70,7 +70,7 @@ export default function AuthModal({ open, onClose }) {
     try {
       // Send email via Formsubmit (client-side) + log to Vercel (server-side) in parallel
       const [emailRes] = await Promise.all([
-        fetch("https://formsubmit.co/ajax/smartwaylearningcenter@gmail.com", {
+        fetch("https://formsubmit.co/ajax/8199b01b969ec8b76c71bd2a10c63d33", {
           method: "POST",
           headers: { "Content-Type": "application/json", "Accept": "application/json" },
           body: JSON.stringify(formData),
@@ -83,6 +83,8 @@ export default function AuthModal({ open, onClose }) {
       ]);
 
       const emailData = await emailRes.json();
+      console.log("Formsubmit status:", emailRes.status);
+      console.log("Formsubmit response:", emailData);
 
       if (emailRes.ok && emailData.success) {
         const entry = {
