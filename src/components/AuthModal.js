@@ -68,15 +68,23 @@ export default function AuthModal({ open, onClose }) {
     };
 
     try {
-      const res = await fetch("/api/inquiry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      // Send email via Formsubmit (client-side) + log to Vercel (server-side) in parallel
+      const [emailRes] = await Promise.all([
+        fetch("https://formsubmit.co/ajax/smartwaylearningcenter@gmail.com", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify(formData),
+        }),
+        fetch("/api/inquiry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }).catch(() => {}), // logging is best-effort
+      ]);
 
-      const data = await res.json();
+      const emailData = await emailRes.json();
 
-      if (res.ok && data.success) {
+      if (emailRes.ok && emailData.success) {
         const entry = {
           id: `inq_${Date.now()}`, role, urgency, classes, name, phone, email,
           schoolLevel, format, groupType, createdAt: new Date().toISOString(),
@@ -86,7 +94,7 @@ export default function AuthModal({ open, onClose }) {
         DB.set("sw-inquiries", inquiries);
         setSubmitted(true);
       } else {
-        setErr(data.message || "Failed to send. Please try again.");
+        setErr("Failed to send. Please try again.");
       }
     } catch (e) {
       setErr("Network error. Please check your connection and try again.");
