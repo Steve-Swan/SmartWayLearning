@@ -31,7 +31,7 @@ export default function SATPage({ onStartToday }) {
           <Reveal delay={0.05}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.12)", padding: "7px 18px 7px 10px", borderRadius: 60, marginBottom: 28 }}>
               <span style={{ width: 26, height: 26, borderRadius: 50, display: "flex", alignItems: "center", justifyContent: "center", background: `${A}25`, fontSize: 12 }}>📝</span>
-              <span style={{ fontSize: 12.5, fontWeight: 700, color: A }}>Now Enrolling 2025–2026</span>
+              <span style={{ fontSize: 12.5, fontWeight: 700, color: A }}>Now Enrolling 2026–2027</span>
             </div>
           </Reveal>
           <Reveal delay={0.1}>

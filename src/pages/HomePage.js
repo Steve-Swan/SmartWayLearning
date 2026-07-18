@@ -96,7 +96,7 @@ export default function HomePage({ mousePos, onStartToday }) {
             <div style={{ flex: 1.1, display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
               <Reveal><div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: C.white, border: `1.5px solid ${C.greenPale}`, padding: "7px 16px 7px 9px", borderRadius: 60, marginBottom: 24, boxShadow: `0 2px 10px ${C.green}06` }}>
                 <span style={{ width: 26, height: 26, borderRadius: 50, display: "flex", alignItems: "center", justifyContent: "center", background: `${C.green}15`, fontSize: 12 }}>🎯</span>
-                <span style={{ fontSize: 12.5, fontWeight: 700, color: C.green }}>Now Enrolling 2025–2026</span>
+                <span style={{ fontSize: 12.5, fontWeight: 700, color: C.green }}>Now Enrolling 2026–2027</span>
               </div></Reveal>
               <Reveal delay={0.1}><h1 style={{ fontFamily: "'Lora', serif", fontSize: 58, fontWeight: 700, lineHeight: 1.08, color: C.greenDeep, marginBottom: 22 }}>
                 Learn the<br /><span style={{ position: "relative", display: "inline-block" }}>
