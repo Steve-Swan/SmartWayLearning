@@ -1,87 +1,11 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { C, PRODUCTS } from '../utils/constants';
+import { C } from '../utils/constants';
 import { AnimCounter, Reveal, Btn, Arrow, Marquee } from '../components/UI';
 import Logo from '../components/Logo';
 import { GradeAccordion, FocusSchedule } from '../components/Sections';
 
-/* ── Gallery items — replace placeholder paths with your own images/videos in public/gallery/ ── */
-const GALLERY_ITEMS = [
-  { id: 1, type: "image", src: "/gallery/1.jpg", alt: "Tutoring session" },
-  { id: 2, type: "image", src: "/gallery/2.jpg", alt: "Students working together" },
-  { id: 3, type: "image", src: "/gallery/3.jpg", alt: "FOCUS program activity" },
-  { id: 4, type: "image", src: "/gallery/4.jpg", alt: "Learning center classroom" },
-  { id: 5, type: "image", src: "/gallery/5.jpg", alt: "Rewards ceremony" },
-  { id: 6, type: "image", src: "/gallery/6.jpg", alt: "Group study session" },
-  { id: 7, type: "video", src: "/gallery/tour.mp4", poster: "/gallery/tour-poster.jpg", alt: "Center tour" },
-  { id: 8, type: "image", src: "/gallery/7.jpg", alt: "Student achievement" },
-];
-
 export default function HomePage({ mousePos, onStartToday }) {
-  const [lightbox, setLightbox] = useState(null);
-  const [carouselIdx, setCarouselIdx] = useState(0);
-  const touchStart = useRef(null);
-
-  const goTo = useCallback((idx) => {
-    setCarouselIdx(Math.max(0, Math.min(GALLERY_ITEMS.length - 1, idx)));
-  }, []);
-
-  const handleTouchStart = useCallback((e) => {
-    touchStart.current = e.touches[0].clientX;
-  }, []);
-
-  const handleTouchEnd = useCallback((e) => {
-    if (touchStart.current === null) return;
-    const diff = touchStart.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      goTo(carouselIdx + (diff > 0 ? 1 : -1));
-    }
-    touchStart.current = null;
-  }, [carouselIdx, goTo]);
-
-  /* Renders a single gallery media item (shared between grid & carousel) */
-  const renderGalleryItem = (item, height) => (
-    <div
-      onClick={() => setLightbox(item)}
-      style={{
-        position: "relative", borderRadius: 20, overflow: "hidden",
-        background: C.gray100, border: `1px solid ${C.greenPale}`,
-        cursor: "pointer", transition: "all 0.3s", height,
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.02)"; e.currentTarget.style.boxShadow = `0 16px 40px ${C.green}12`; }}
-      onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
-    >
-      {item.type === "video" ? (
-        <>
-          <video
-            src={item.src} poster={item.poster}
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-            muted playsInline
-            onMouseEnter={(e) => e.target.play().catch(() => {})}
-            onMouseLeave={(e) => { e.target.pause(); e.target.currentTime = 0; }}
-          />
-          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,.2)", pointerEvents: "none" }}>
-            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(255,255,255,.9)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 20px rgba(0,0,0,.2)" }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill={C.greenDeep}><path d="M8 5v14l11-7z" /></svg>
-            </div>
-          </div>
-        </>
-      ) : (
-        <img src={item.src} alt={item.alt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-          onError={(e) => { e.target.style.display = "none"; }}
-        />
-      )}
-      <div className="gallery-placeholder" style={{
-        position: "absolute", inset: 0, display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center", gap: 8,
-        background: `linear-gradient(135deg, ${C.greenPale}, ${C.gray100})`, zIndex: 0,
-      }}>
-        <span style={{ fontSize: 36 }}>{item.type === "video" ? "🎬" : "📷"}</span>
-        <span style={{ fontSize: 12, fontWeight: 600, color: C.gray500 }}>{item.alt}</span>
-      </div>
-    </div>
-  );
-
   return (
     <>
       {/* ═══ HERO ═══ */}
@@ -254,31 +178,6 @@ export default function HomePage({ mousePos, onStartToday }) {
         </div>
       </section>
 
-      {/* ═══ SHOP ═══ */}
-      <section id="shop" style={{ padding: "88px 48px", background: `linear-gradient(180deg, ${C.white}, ${C.greenMist})` }}>
-        <div style={{ maxWidth: 1320, margin: "0 auto" }}>
-          <Reveal><div style={{ textAlign: "center", marginBottom: 48 }}>
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: C.gold, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.15em" }}>// POINT STORE</span>
-            <h2 style={{ fontFamily: "'Lora', serif", fontSize: 40, fontWeight: 700, color: C.greenDeep, marginTop: 10 }}>Earn Points, Get Prizes</h2>
-            <p style={{ color: C.gray500, fontSize: 15, marginTop: 12, maxWidth: 500, margin: "12px auto 0" }}>Students earn points for attendance, good grades & participation. Here's what you can redeem!</p>
-          </div></Reveal>
-          <div className="shop-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 36 }}>
-            {PRODUCTS.map((item, i) => (
-              <Reveal key={item.id} delay={i * 0.03}>
-                <div style={{ background: C.white, borderRadius: 18, padding: "24px 20px", border: `1px solid ${C.greenPale}`, transition: "all 0.3s", textAlign: "center", height: "100%" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = `0 12px 32px ${C.gold}10`; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-                  <div style={{ fontSize: 36, marginBottom: 10 }}>{item.emoji}</div>
-                  <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 50, background: `${C.gold}12`, color: C.goldDark }}>{item.cat}</span>
-                  <div style={{ fontWeight: 600, fontSize: 13.5, color: C.gray900, marginTop: 8, lineHeight: 1.3, minHeight: 36 }}>{item.name}</div>
-                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: 17, color: C.gold, margin: "8px 0 0" }}>{item.points} pts</div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ═══ WHY US ═══ */}
       <section style={{ padding: "88px 48px", background: C.offWhite }}>
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
@@ -325,121 +224,32 @@ export default function HomePage({ mousePos, onStartToday }) {
         </div>
       </section>
 
-      {/* ═══ GALLERY ═══ */}
-      <section id="gallery" style={{ padding: "88px 48px", background: C.offWhite }}>
+      {/* ═══ INSTAGRAM ═══ */}
+      <section id="instagram" style={{ padding: "88px 48px", background: C.offWhite }}>
         <div style={{ maxWidth: 1320, margin: "0 auto" }}>
           <Reveal><div style={{ textAlign: "center", marginBottom: 48 }}>
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: C.green, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.15em" }}>// OUR CENTER</span>
-            <h2 style={{ fontFamily: "'Lora', serif", fontSize: 40, fontWeight: 700, color: C.greenDeep, marginTop: 10 }}>Inside Smart Way</h2>
-            <p style={{ color: C.gray500, fontSize: 15, marginTop: 12, maxWidth: 520, margin: "12px auto 0" }}>Take a peek inside our tutoring center — where learning comes to life every day.</p>
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: C.green, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.15em" }}>// INSTAGRAM</span>
+            <h2 style={{ fontFamily: "'Lora', serif", fontSize: 40, fontWeight: 700, color: C.greenDeep, marginTop: 10 }}>Follow Smart Way</h2>
+            <p style={{ color: C.gray500, fontSize: 15, marginTop: 12, maxWidth: 520, margin: "12px auto 0" }}>See what our students are up to — class moments, achievements & updates from our center.</p>
           </div></Reveal>
-
-          {/* Desktop Grid */}
-          <div className="gallery-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
-            {GALLERY_ITEMS.map((item, i) => (
-              <Reveal key={item.id} delay={i * 0.05} style={i === 6 ? { gridColumn: "span 2", gridRow: "span 2" } : {}}>
-                {renderGalleryItem(item, i === 6 ? "100%" : 220)}
-              </Reveal>
-            ))}
-          </div>
-
-          {/* Mobile Carousel */}
-          <div className="gallery-carousel" style={{ display: "none" }}>
-            <div
-              style={{
-                background: C.white, borderRadius: 24, padding: 16,
-                border: `1px solid ${C.greenPale}`, boxShadow: `0 8px 32px ${C.green}08`,
-              }}
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-            >
-              {/* Slide window */}
-              <div style={{ position: "relative", overflow: "hidden", borderRadius: 16 }}>
-                <div style={{
-                  display: "flex", transition: "transform 0.4s cubic-bezier(.4,0,.2,1)",
-                  transform: `translateX(-${carouselIdx * 100}%)`,
-                }}>
-                  {GALLERY_ITEMS.map((item) => (
-                    <div key={item.id} style={{ minWidth: "100%", flexShrink: 0 }}>
-                      {renderGalleryItem(item, 280)}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Caption */}
-              <div style={{ textAlign: "center", marginTop: 14 }}>
-                <span style={{ fontSize: 14, fontWeight: 600, color: C.gray700 }}>{GALLERY_ITEMS[carouselIdx].alt}</span>
-                {GALLERY_ITEMS[carouselIdx].type === "video" && (
-                  <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 50, background: `${C.coral}12`, color: C.coral }}>VIDEO</span>
-                )}
-              </div>
-
-              {/* Controls */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginTop: 14 }}>
-                <button onClick={() => goTo(carouselIdx - 1)} disabled={carouselIdx === 0}
-                  style={{
-                    width: 40, height: 40, borderRadius: "50%", border: `1.5px solid ${C.greenPale}`,
-                    background: carouselIdx === 0 ? C.gray100 : C.white, cursor: carouselIdx === 0 ? "default" : "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    opacity: carouselIdx === 0 ? 0.4 : 1, transition: "all .2s",
-                  }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={C.greenDeep} strokeWidth="2.5" strokeLinecap="round"><path d="M15 18l-6-6 6-6" /></svg>
-                </button>
-
-                <div style={{ display: "flex", gap: 6 }}>
-                  {GALLERY_ITEMS.map((_, i) => (
-                    <button key={i} onClick={() => goTo(i)}
-                      style={{
-                        width: carouselIdx === i ? 20 : 8, height: 8, borderRadius: 50, border: "none",
-                        background: carouselIdx === i ? C.green : C.gray300,
-                        cursor: "pointer", transition: "all .3s", padding: 0,
-                      }}
-                    />
-                  ))}
-                </div>
-
-                <button onClick={() => goTo(carouselIdx + 1)} disabled={carouselIdx === GALLERY_ITEMS.length - 1}
-                  style={{
-                    width: 40, height: 40, borderRadius: "50%", border: `1.5px solid ${C.greenPale}`,
-                    background: carouselIdx === GALLERY_ITEMS.length - 1 ? C.gray100 : C.white,
-                    cursor: carouselIdx === GALLERY_ITEMS.length - 1 ? "default" : "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    opacity: carouselIdx === GALLERY_ITEMS.length - 1 ? 0.4 : 1, transition: "all .2s",
-                  }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={C.greenDeep} strokeWidth="2.5" strokeLinecap="round"><path d="M9 18l6-6-6-6" /></svg>
-                </button>
-              </div>
-
-              {/* Counter */}
-              <div style={{ textAlign: "center", marginTop: 8 }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: C.gray500, fontWeight: 600 }}>{carouselIdx + 1} / {GALLERY_ITEMS.length}</span>
-              </div>
+          <Reveal delay={0.1}>
+            <div style={{ maxWidth: 560, margin: "0 auto", background: C.white, borderRadius: 24, padding: 16, border: `1px solid ${C.greenPale}`, boxShadow: `0 8px 32px ${C.green}08` }}>
+              <iframe
+                title="Smart Way Learning Center on Instagram"
+                src="https://www.instagram.com/smartwaylearningcenter/embed"
+                style={{ width: "100%", height: 640, border: "none", borderRadius: 16, display: "block", background: C.white }}
+                loading="lazy"
+                scrolling="no"
+              />
             </div>
-          </div>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div style={{ textAlign: "center", marginTop: 28 }}>
+              <a href="https://www.instagram.com/smartwaylearningcenter" target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "12px 28px", borderRadius: 50, fontWeight: 700, fontSize: 14, textDecoration: "none", background: C.green, color: C.white }}>📸 Follow @smartwaylearningcenter</a>
+            </div>
+          </Reveal>
         </div>
       </section>
-
-      {/* Lightbox */}
-      {lightbox && (
-        <div onClick={() => setLightbox(null)} style={{
-          position: "fixed", inset: 0, zIndex: 10000, background: "rgba(0,0,0,.85)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          backdropFilter: "blur(8px)", cursor: "zoom-out",
-        }}>
-          <button onClick={() => setLightbox(null)} style={{
-            position: "absolute", top: 20, right: 24, background: "none", border: "none",
-            color: "#fff", fontSize: 32, cursor: "pointer", lineHeight: 1,
-          }}>&times;</button>
-          <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: "90vw", maxHeight: "85vh", borderRadius: 16, overflow: "hidden", cursor: "default" }}>
-            {lightbox.type === "video" ? (
-              <video src={lightbox.src} poster={lightbox.poster} controls autoPlay style={{ maxWidth: "90vw", maxHeight: "85vh", display: "block", borderRadius: 16 }} />
-            ) : (
-              <img src={lightbox.src} alt={lightbox.alt} style={{ maxWidth: "90vw", maxHeight: "85vh", display: "block", borderRadius: 16, objectFit: "contain" }} />
-            )}
-          </div>
-        </div>
-      )}
 
       {/* ═══ CTA ═══ */}
       <section style={{ padding: "88px 48px", background: C.offWhite }}>
@@ -514,7 +324,7 @@ export default function HomePage({ mousePos, onStartToday }) {
             </div>
             <div>
               <h4 style={{ color: C.white, fontSize: 12, fontWeight: 700, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.1em" }}>Programs</h4>
-              {["SHSAT Prep", "SAT Prep", "NY State Tests", "Regents", "FOCUS", "For Schools", "Point Store"].map((l) => <a key={l} href="#" style={{ display: "block", color: "#8a9ba3", textDecoration: "none", fontSize: 13.5, marginBottom: 9 }}>{l}</a>)}
+              {["SHSAT Prep", "SAT Prep", "NY State Tests", "Regents", "FOCUS", "For Schools"].map((l) => <a key={l} href="#" style={{ display: "block", color: "#8a9ba3", textDecoration: "none", fontSize: 13.5, marginBottom: 9 }}>{l}</a>)}
             </div>
             <div>
               <h4 style={{ color: C.white, fontSize: 12, fontWeight: 700, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.1em" }}>Locations</h4>

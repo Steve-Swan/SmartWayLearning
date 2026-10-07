@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { C } from '../utils/constants';
 import { Reveal, Btn } from '../components/UI';
 
+const A = C.gold;       // portal accent
+
 export default function SHSATPage({ onStartToday }) {
   const [scholarshipOpen, setScholarshipOpen] = useState(false);
   useEffect(() => { window.scrollTo(0, 0); }, []);
@@ -396,6 +398,85 @@ export default function SHSATPage({ onStartToday }) {
               <Btn onClick={onStartToday} variant="gold" style={{ padding: "14px 36px", fontSize: 15 }}>Register Now →</Btn>
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ═══ PRACTICE PORTAL ═══ */}
+      <section style={{
+        padding: "72px 48px",
+        background: `linear-gradient(160deg, ${C.navy}, #1a2332)`,
+        position: "relative", overflow: "hidden",
+      }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.06, backgroundImage: `linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
+        <div style={{ position: "absolute", top: "10%", right: "5%", width: 400, height: 400, borderRadius: "50%", background: `${C.gold}10`, filter: "blur(100px)" }} />
+        <div style={{ position: "absolute", bottom: "10%", left: "10%", width: 250, height: 250, borderRadius: "50%", background: `${C.purple}08`, filter: "blur(80px)" }} />
+
+        <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 48, flexWrap: "wrap" }}>
+            {/* Left — Info */}
+            <div style={{ flex: 1, minWidth: 300 }}>
+              <Reveal>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `${C.gold}15`, padding: "6px 14px 6px 8px", borderRadius: 50, marginBottom: 20 }}>
+                  <span style={{ width: 24, height: 24, borderRadius: 50, display: "flex", alignItems: "center", justifyContent: "center", background: `${C.gold}25`, fontSize: 12 }}>💻</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: A, textTransform: "uppercase", letterSpacing: "0.08em" }}>Student Portal</span>
+                </div>
+              </Reveal>
+              <Reveal delay={0.05}>
+                <h2 style={{ fontFamily: "'Lora', serif", fontSize: 36, fontWeight: 700, color: C.white, lineHeight: 1.15, marginBottom: 14 }}>
+                  SHSAT Practice Portal
+                </h2>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p style={{ fontSize: 16, color: "rgba(255,255,255,.6)", lineHeight: 1.7, marginBottom: 28, maxWidth: 480 }}>
+                  Access full-length SHSAT practice tests covering both ELA and Math, with instant scoring. Simulate real test-day conditions, track your progress, and pinpoint areas to improve before test day.
+                </p>
+              </Reveal>
+              <Reveal delay={0.15}>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 32 }}>
+                  {["Full-Length Tests", "ELA + Math", "Instant Scores", "Progress Tracking"].map((tag) => (
+                    <span key={tag} style={{
+                      padding: "8px 16px", borderRadius: 50, fontSize: 12.5, fontWeight: 600,
+                      background: "rgba(255,255,255,.06)", color: "rgba(255,255,255,.7)",
+                      border: "1px solid rgba(255,255,255,.08)",
+                    }}>{tag}</span>
+                  ))}
+                </div>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <Btn href="https://smartwaylearning.practicetest.io/sign-in" variant="gold" style={{ padding: "14px 36px", fontSize: 15 }}>Log In to Portal →</Btn>
+              </Reveal>
+            </div>
+
+            {/* Right — Visual Card */}
+            <Reveal delay={0.15}>
+              <div style={{
+                background: "rgba(255,255,255,.04)", borderRadius: 24, padding: "36px 32px",
+                border: "1px solid rgba(255,255,255,.08)", backdropFilter: "blur(10px)",
+                minWidth: 280, maxWidth: 360,
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, paddingBottom: 20, borderBottom: "1px solid rgba(255,255,255,.08)" }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 14, background: `${C.gold}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>📊</div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 15, color: C.white }}>Your Dashboard</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,.4)" }}>Track scores & improvement</div>
+                  </div>
+                </div>
+                {[
+                  { label: "Practice Tests", value: "Full-Length", color: A },
+                  { label: "Sections", value: "ELA + Math", color: C.green },
+                  { label: "Scoring", value: "Instant", color: C.coral },
+                ].map((stat) => (
+                  <div key={stat.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: "1px solid rgba(255,255,255,.05)" }}>
+                    <span style={{ fontSize: 13.5, color: "rgba(255,255,255,.5)" }}>{stat.label}</span>
+                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 700, fontSize: 14, color: stat.color }}>{stat.value}</span>
+                  </div>
+                ))}
+                <p style={{ fontSize: 11.5, color: "rgba(255,255,255,.3)", marginTop: 16, lineHeight: 1.5 }}>
+                  Available exclusively to enrolled Smart Way students.
+                </p>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 

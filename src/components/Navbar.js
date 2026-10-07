@@ -17,7 +17,6 @@ export default function Navbar({ scrolled, onAuthOpen }) {
     { label: "SAT", href: "/sat", isRoute: true },
     { label: "FOCUS", href: "#focus" },
     { label: "For Schools", href: "#forschools" },
-    { label: "Point Store", href: "#shop" },
   ];
 
   const handleAnchorClick = (e, href) => {
